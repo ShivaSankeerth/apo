@@ -122,6 +122,50 @@ APO combines the best ideas from leading frameworks:
 
 See [docs/comparison.md](docs/comparison.md) for detailed comparison.
 
+## Interactive App
+
+Try the Streamlit web application for visual prompt optimization:
+
+```bash
+pip install -r requirements-app.txt
+streamlit run app.py
+```
+
+Features:
+- 📝 Interactive prompt editor with variable detection
+- 🧪 Dynamic test case management
+- ▶️ Live testing with LLM outputs
+- 👍👎 User feedback collection
+- 🚀 AI-powered optimization with progress visualization
+- 📊 Before/after comparison and metrics
+
+[Read the App Guide](APP_README.md)
+
+## Benchmark Suite
+
+Compare all optimizers with comprehensive benchmarks:
+
+```bash
+# Full benchmark (4 tasks, 8 optimizers)
+python run_benchmark.py --provider anthropic --api-key YOUR_KEY
+
+# Quick test (1 task)
+python run_benchmark.py --provider anthropic --api-key YOUR_KEY --quick
+```
+
+**Results include:**
+- 📊 Interactive performance charts
+- 📈 Convergence curves
+- ⚡ Efficiency analysis
+- 🏆 Winner rankings
+- 📑 Detailed metrics tables
+
+**Tested optimizers:** Random Search, Hill Climbing, Simulated Annealing, Genetic Algorithm, Meta-Prompt, Reflection, Reflection+Pareto, Bootstrap
+
+**Benchmark tasks:** Sentiment Classification, Question Answering, Category Classification, Instruction Following
+
+[Read the Benchmark Guide](benchmarks/BENCHMARK_README.md)
+
 ## Examples
 
 - `examples/simple_optimization.py` - Basic genetic algorithm
@@ -136,6 +180,8 @@ See [docs/comparison.md](docs/comparison.md) for detailed comparison.
 - [Getting Started](docs/getting_started.md) - Installation and basic usage
 - [API Reference](docs/api.md) - Complete API documentation
 - [Comparison](docs/comparison.md) - Comparison with other frameworks
+- [Streamlit App Guide](docs/streamlit_app_guide.md) - Interactive app walkthrough
+- [Benchmark Guide](benchmarks/BENCHMARK_README.md) - Running and analyzing benchmarks
 
 ## Citation
 
