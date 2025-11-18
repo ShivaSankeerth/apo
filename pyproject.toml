@@ -42,6 +42,24 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.5.0",
 ]
+gemini = [
+    "google-generativeai>=0.3.0",
+]
+ollama = [
+    "ollama>=0.1.0",
+]
+cohere = [
+    "cohere>=4.0.0",
+]
+mistral = [
+    "mistralai>=0.0.7",
+]
+all-providers = [
+    "google-generativeai>=0.3.0",
+    "ollama>=0.1.0",
+    "cohere>=4.0.0",
+    "mistralai>=0.0.7",
+]
 
 [project.urls]
 Homepage = "https://github.com/ShivaSankeerth/apo"

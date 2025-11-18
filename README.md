@@ -18,7 +18,9 @@ A powerful framework for automatically optimizing prompts for Large Language Mod
 - **Bootstrap Learning** - Automatically generates examples from successful runs (DSPy-inspired)
 
 ### Core Capabilities
-- **LLM Provider Support** - OpenAI, Anthropic (Claude), extensible to others
+- **LLM Provider Support** - OpenAI, Anthropic (Claude), Google Gemini, Ollama (local models), Cohere, Mistral
+- **LLM-as-Judge Evaluation** - Use powerful LLMs to evaluate prompt quality with customizable rubrics
+- **Prompt Diff Viewer** - Visualize changes between prompts with console, HTML, and markdown outputs
 - **Flexible Evaluation System** - Custom metrics, multi-objective optimization
 - **Prompt Signatures** - Declarative input/output specifications (DSPy-style)
 - **Version Management** - Track and compare prompt versions
@@ -33,6 +35,27 @@ pip install -e .
 For development:
 ```bash
 pip install -e ".[dev]"
+```
+
+### Optional Provider Dependencies
+
+Install specific providers as needed:
+
+```bash
+# Google Gemini
+pip install -e ".[gemini]"
+
+# Ollama (local models)
+pip install -e ".[ollama]"
+
+# Cohere
+pip install -e ".[cohere]"
+
+# Mistral AI
+pip install -e ".[mistral]"
+
+# All providers at once
+pip install -e ".[all-providers]"
 ```
 
 ## Quick Start
@@ -92,13 +115,62 @@ result = await optimizer.optimize(initial_prompt, test_cases)
 print(f"Bootstrapped {result.metadata['num_examples']} examples")
 ```
 
+### LLM-as-Judge Evaluation
+```python
+from apo.evaluators import LLMJudgeEvaluator, ACCURACY_RUBRIC, HELPFULNESS_RUBRIC
+
+# Use a powerful LLM to judge prompt outputs
+judge_provider = AnthropicProvider(api_key="your-key", model="claude-3-5-sonnet-20241022")
+evaluator = LLMJudgeEvaluator(
+    judge_provider=judge_provider,
+    rubrics=[ACCURACY_RUBRIC, HELPFULNESS_RUBRIC],
+    use_chain_of_thought=True
+)
+
+optimizer = MetaPromptOptimizer(provider=provider, evaluator=evaluator)
+result = await optimizer.optimize(initial_prompt, test_cases)
+```
+
+### Local Models with Ollama
+```python
+from apo.providers import OllamaProvider
+
+# No API costs - run optimization completely locally!
+provider = OllamaProvider(model="llama2", host="http://localhost:11434")
+optimizer = HillClimbingOptimizer(provider=provider, evaluator=evaluator)
+result = await optimizer.optimize(initial_prompt, test_cases)
+```
+
+### Prompt Diff Viewer
+```python
+from apo.utils import PromptDiff, PromptEvolutionTracker
+
+# Compare two prompts
+diff = PromptDiff(original_prompt, optimized_prompt)
+print(diff.to_console(colors=True))
+print(f"Similarity: {diff.get_similarity():.1%}")
+
+# Track evolution over time
+tracker = PromptEvolutionTracker()
+tracker.add_version("Initial", prompt_v1)
+tracker.add_version("Iteration 1", prompt_v2)
+tracker.add_version("Final", prompt_v3)
+tracker.show_evolution()
+
+# Save HTML diff
+with open("diff.html", "w") as f:
+    f.write(diff.to_html())
+```
+
 ## Architecture
 
 ```
 src/apo/
 ├── core/           # Core abstractions (Prompt, Optimizer, Evaluator)
 ├── strategies/     # Optimization algorithms
-├── providers/      # LLM provider integrations
+├── providers/      # LLM provider integrations (OpenAI, Anthropic, Gemini, Ollama, Cohere, Mistral)
+├── evaluators/     # Advanced evaluators (LLM-as-Judge)
+├── utils/          # Utilities (Prompt Diff Viewer)
 ├── metrics/        # Evaluation metrics
 ├── tracking/       # Experiment tracking
 └── config/         # Configuration management
@@ -168,12 +240,18 @@ python run_benchmark.py --provider anthropic --api-key YOUR_KEY --quick
 
 ## Examples
 
+### Optimization Strategies
 - `examples/simple_optimization.py` - Basic genetic algorithm
 - `examples/meta_prompt_example.py` - Meta-prompt optimization
 - `examples/reflection_pareto_example.py` - Reflection with Pareto frontier
 - `examples/bootstrap_example.py` - Bootstrap learning
 - `examples/multi_objective.py` - Multi-objective optimization
 - `examples/config_based.py` - Configuration-driven optimization
+
+### Advanced Features
+- `examples/llm_judge_example.py` - LLM-as-Judge evaluation with custom rubrics
+- `examples/local_model_example.py` - Local optimization using Ollama (no API costs!)
+- `examples/diff_viewer_example.py` - Visualizing prompt evolution and changes
 
 ## Documentation
 
