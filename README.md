@@ -32,9 +32,15 @@ A powerful framework for automatically optimizing prompts for Large Language Mod
 pip install -e .
 ```
 
-For development:
+For development (includes testing tools):
 ```bash
 pip install -e ".[dev]"
+```
+
+Run tests:
+```bash
+pytest tests/ -v
+pytest tests/ --cov=apo --cov-report=html  # With coverage report
 ```
 
 ### Optional Provider Dependencies
@@ -252,6 +258,29 @@ python run_benchmark.py --provider anthropic --api-key YOUR_KEY --quick
 - `examples/llm_judge_example.py` - LLM-as-Judge evaluation with custom rubrics
 - `examples/local_model_example.py` - Local optimization using Ollama (no API costs!)
 - `examples/diff_viewer_example.py` - Visualizing prompt evolution and changes
+
+## Testing
+
+APO has a comprehensive test suite with 157+ tests covering all components:
+
+- **27 test files** organized by module (core, strategies, providers, evaluators, utils)
+- **Unit tests** for all public APIs with mocking to avoid external dependencies
+- **Async test support** using pytest-asyncio
+- **Code coverage** tracking with pytest-cov
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run specific test module
+pytest tests/test_strategies/test_genetic.py -v
+
+# Run with coverage
+pytest tests/ --cov=apo --cov-report=html
+
+# Run only fast tests (excluding slow integration tests)
+pytest tests/ -m "not slow"
+```
 
 ## Documentation
 
